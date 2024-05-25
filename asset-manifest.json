@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/react-bootstrap-form-fields-registration/static/css/main.d5289b2f.css",
+    "main.js": "/react-bootstrap-form-fields-registration/static/js/main.fc710073.js",
+    "static/js/453.dce86bf2.chunk.js": "/react-bootstrap-form-fields-registration/static/js/453.dce86bf2.chunk.js",
+    "index.html": "/react-bootstrap-form-fields-registration/index.html",
+    "main.d5289b2f.css.map": "/react-bootstrap-form-fields-registration/static/css/main.d5289b2f.css.map",
+    "main.fc710073.js.map": "/react-bootstrap-form-fields-registration/static/js/main.fc710073.js.map",
+    "453.dce86bf2.chunk.js.map": "/react-bootstrap-form-fields-registration/static/js/453.dce86bf2.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.d5289b2f.css",
+    "static/js/main.fc710073.js"
+  ]
+}
