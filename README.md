@@ -1,70 +1,226 @@
-# Getting Started with Create React App
+# React Application with React-Bootstrap Form
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+```js
+import React, { useState } from "react";
+import { FaSignInAlt, FaList } from "react-icons/fa";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
+import Card from "react-bootstrap/Card";
+import Table from 'react-bootstrap/Table';
 
-## Available Scripts
+const userObj = {
+  "first_name": "",
+  "last_name": "",
+  "email": "",
+  "password": ""
+}
 
-In the project directory, you can run:
+const App = () => {
 
-### `npm start`
+  const [user, setUser] = useState(userObj);
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [isPasswordConfirmed, setIsPasswordConfirmed] = useState(true);
+  const [userList, setUserList] = useState([]);
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+  const confirmPasswordHandler = () => {
+    if (confirmPassword === user.password) {
+      setIsPasswordConfirmed(true);
+    } else {
+      setIsPasswordConfirmed(false);
+    }
+    console.log(isPasswordConfirmed);
+  }
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+  const formSubmitHandler = (e) => {
+    e.preventDefault();
+    console.log(isPasswordConfirmed);
+    if (isPasswordConfirmed) {
+      setUserList([...userList, user]);
+      formReset();
+    }
+  };
 
-### `npm test`
+  const formResetHandler = () => {
+    formReset();
+  }
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+  const formReset = () => {
+    let _userObj = {
+      "first_name": "",
+      "last_name": "",
+      "email": "",
+      "password": ""
+    }
+    setUser(_userObj);
+    setConfirmPassword("");
+  }
 
-### `npm run build`
+  const resetUserListHandler = () => {
+    setUserList([]);
+    formReset();
+  }
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+  return (
+    <>
+      <Container fluid="md">
+        <Row className="mt-3">
+          <Col md={4} xs={12}>
+            <Form onSubmit={formSubmitHandler}>
+              <Card>
+                <Card.Header>
+                  <h3 className="mb-3">
+                    <FaSignInAlt className="text-primary" /> Registration Form!
+                  </h3>
+                </Card.Header>
+                <Card.Body>
+                  <Row className="mb-3">
+                    <Col>
+                      <Form.Group controlId="forFirstName">
+                        <Form.Label>
+                          First Name: <em>*</em>
+                        </Form.Label>
+                        <Form.Control
+                          type="text"
+                          name="first_name"
+                          placeholder="First Name"
+                          required
+                          value={user.first_name}
+                          onChange={(e) => setUser({...user, "first_name": e.target.value})}
+                        />
+                      </Form.Group>
+                    </Col>
+                    <Col>
+                      <Form.Group controlId="forLastName">
+                        <Form.Label>
+                          Last Name: <em>*</em>
+                        </Form.Label>
+                        <Form.Control
+                          type="text"
+                          name="last_name"
+                          placeholder="Last Name"
+                          required
+                          value={user.last_name}
+                          onChange={(e) => setUser({...user, "last_name": e.target.value})}
+                        />
+                      </Form.Group>
+                    </Col>
+                  </Row>
+                  <Form.Group className="mb-3" controlId="forEmailAddress">
+                    <Form.Label>
+                      Email Id: <em>*</em>
+                    </Form.Label>
+                    <Form.Control
+                      type="email"
+                      name="email"
+                      placeholder="Email Address"
+                      required
+                      value={user.email}
+                      onChange={(e) => setUser({...user, "email": e.target.value})}
+                    />
+                    <Form.Text className="text-muted">
+                      We'll never share your email with anyone else.
+                    </Form.Text>
+                  </Form.Group>
+                  <Form.Group className="mb-3" controlId="forPassword">
+                    <Form.Label>
+                      Password: <em>*</em>
+                    </Form.Label>
+                    <Form.Control
+                      type="password"
+                      name="password"
+                      placeholder="Password"
+                      required
+                      value={user.password}
+                      onChange={(e) => setUser({...user, "password": e.target.value})}
+                    />
+                  </Form.Group>
+                  <Form.Group className="mb-3" controlId="forConfirmPassword">
+                    <Form.Label>
+                      Confirm Password: <em>*</em>
+                    </Form.Label>
+                    <Form.Control
+                      type="password"
+                      name="confirm_password"
+                      placeholder="Confirm Password"
+                      required
+                      value={confirmPassword}
+                      onBlur={confirmPasswordHandler}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                    />
+                    <Form.Text className={"text-muted" + ((isPasswordConfirmed) ? ' d-none' : ' d-block') }>
+                      Confirm password not matched!
+                    </Form.Text>
+                  </Form.Group>
+                </Card.Body>
+                <Card.Footer>
+                  <Button type="submit" variant="primary">
+                    Register Me!
+                  </Button>
+                  <Button type="button" variant="danger" className="mx-2" onClick={formResetHandler}>
+                    Reset
+                  </Button>
+                </Card.Footer>
+              </Card>
+            </Form>
+          </Col>
+          <Col md={8} xs={12}>
+            <Card>
+              <Card.Header>
+                <h3><FaList /> User List - ({userList.length})</h3>
+              </Card.Header>
+              <Card.Body>
+                <Table striped bordered hover size="sm">
+                  <thead>
+                    <tr>
+                      <th>SL</th>
+                      <th>NAME</th>
+                      <th>EMAIL ID</th>
+                      <th>PASSWORD</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {
+                      userList.length > 0 && 
+                        userList.map((item, index) => {
+                          return (
+                            <tr key={"userTr-" + index}>
+                              <th>{index + 1}</th>
+                              <td>{item.first_name + " " + item.last_name}</td>
+                              <td>{item.email}</td>
+                              <td>{item.password}</td>
+                            </tr>
+                          )
+                        })
+                    }
+                    {
+                      userList.length === 0 && (
+                        <tr>
+                          <td colSpan="4">No user found!</td>
+                        </tr>
+                      )
+                    }
+                  </tbody>
+                </Table>
+              </Card.Body>
+              <Card.Footer style={{textAlign: 'right'}}>
+                {
+                  userList.length > 0 && (
+                    <Button type="button" variant="danger" onClick={resetUserListHandler}>
+                      Clear All
+                    </Button>
+                  )
+                }
+              </Card.Footer>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
+    </>
+  );
+};
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+export default App;
+```
